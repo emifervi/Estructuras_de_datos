@@ -33,7 +33,6 @@ int main(){
     }
 
     cin >> numSolns;
-    
 
     for(int i = 0; i < numSolns; i++){
         // Recibe un nombre de equipo, problema resuelto, tiempo tardado y
