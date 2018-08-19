@@ -1,4 +1,5 @@
 #include <iostream>
+#include <string>
 #include <map>
 #include <vector>
 using namespace std;
@@ -90,10 +91,10 @@ void fill(int solutions, map<string, Team> &regTeams){
         // Verifica si el problema existe en el mapa de problemas
         if(regTeams[teamName].problemsSolved.count(problemName)){
             // Si sí existe evalua el puntaje y cambia el status y puntaje
-            regTeams[teamName].problemsSolved[problemName].score += (regTeams[teamName].problemsSolved[problemName].status[0] == 'A') ? timeTaken : 20;
             if(answeredProblem.status[0] == 'A'){
                 regTeams[teamName].problemsSolved[problemName].status = answeredProblem.status;
             }
+            regTeams[teamName].problemsSolved[problemName].score += (regTeams[teamName].problemsSolved[problemName].status[0] == 'A') ? timeTaken : 20;
         }
         else{
             // Si no existe lo anexa y evalua el status y puntaje
@@ -137,16 +138,16 @@ void bubbleSort(vector<Team> &list){
  
        for (int j = 0; j < list.size()-i-1; j++) 
            // Edge case when both number of problems and points are the same.
-           if (list[j].problemsSolved.size() == list[j+1].problemsSolved.size() && list[j].result == list[j + 1].result && list[j].regNum > list[j+1].regNum){
+           if (list[j].solved == list[j+1].solved && list[j].result == list[j + 1].result && list[j].regNum > list[j+1].regNum){
                swap(&list[j], &list[j+1]);
            }
             // Compara el número de problemas resueltos por los elementos en j y j + 1
-           else if (list[j].problemsSolved.size() < list[j+1].problemsSolved.size()){
+           else if (list[j].solved < list[j+1].solved){
               swap(&list[j], &list[j+1]);
            }
 
            // Si tienen el mismo número de problemas compara el tiempo que tardaron en contestar.
-           else if (list[j].problemsSolved.size() == list[j+1].problemsSolved.size() && list[j].result > list[j + 1].result){
+           else if (list[j].solved == list[j+1].solved && list[j].result > list[j + 1].result){
                swap(&list[j], &list[j+1]);
            }      
 }
