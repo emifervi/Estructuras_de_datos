@@ -21,19 +21,16 @@ struct Problem{
 struct Team{
     string name;
     map<string, Problem> problemsSolved;
-    int result, regNum, solved;
+    int result, regNum;
 
     Team(){
         name = "";
         result = 0;
         regNum = 0;
-        solved = 0;
     }    
 
     Team(string name){
         this->name = name;
-        result = 0;
-        solved = 0;
     }
 };
 
@@ -63,14 +60,14 @@ int main(){
     // SE llena el mapa
     fill(numSolns, teamMap);
 
-    // Se pasa el mapa a una lista y se ordena.
+    /* // Se pasa el mapa a una lista y se ordena.
     vector <Team> teamList;
 
     mapTransfer(teamMap, teamList);
     bubbleSort(teamList);
 
     // Se despliegan los resultados.
-    display(teamList);
+    display(teamList); */
 
     return 0;
 }
@@ -87,34 +84,27 @@ void fill(int solutions, map<string, Team> &regTeams){
         cin >> teamName >> problemName >> timeTaken >> probStatus;
         Problem answeredProblem = Problem(timeTaken, probStatus);
 
-        // Verifica si el problema existe en el mapa de problemas
-        if(regTeams[teamName].problemsSolved.count(problemName)){
-            // Si sí existe evalua el puntaje y cambia el status y puntaje
-            regTeams[teamName].problemsSolved[problemName].score += (regTeams[teamName].problemsSolved[problemName].status[0] == 'A') ? timeTaken : 20;
-            if(answeredProblem.status[0] == 'A'){
-                regTeams[teamName].problemsSolved[problemName].status = answeredProblem.status;
-            }
+        cout << answeredProblem.score << " " << answeredProblem.status << endl;
+
+       /*  if(regTeams[teamName].problemsSolved.count(problemName)){
+            regTeams[teamName].problemsSolved[problemName] += (probStatus[0] == 'A') ? timeTaken : 20;
         }
         else{
-            // Si no existe lo anexa y evalua el status y puntaje
-            regTeams[teamName].problemsSolved[problemName] = answeredProblem;
-            regTeams[teamName].problemsSolved[problemName].score = (regTeams[teamName].problemsSolved[problemName].status[0] == 'A') ? timeTaken : 20;
-        } 
+            regTeams[teamName].problemsSolved[problemName] = (probStatus[0] == 'A') ? timeTaken : 20;
+        } */
     }
 }
 
-// La función toma como parámetros el mapa de equipos registrados y un vector para 
+/* // La función toma como parámetros el mapa de equipos registrados y un vector para 
 // guardar todos y posteriormente ordenarlos.
 void mapTransfer(map<string, Team> &regTeams, vector<Team> &list){
     
     // Itera sobre cada equipo en el mapa, calcula el resultado y lo pasa al vector
     for(auto const& i : regTeams){ 
 
-        // Itera sobre el mapa de problemas de cada equipo y los suma al resultado dependiendo del estatus
-        // Además cuenta los problemas resuletos.
+        // Itera sobre el mapa de problemas de cada equipo y los suma al resultado
         for(auto const& j : regTeams[i.first].problemsSolved){
-            (j.second.status[0] == 'A') ? regTeams[i.first].result += j.second.score : 0; 
-            (j.second.status[0] == 'A') ? regTeams[i.first].solved += 1 : 0;
+            regTeams[i.first].result += j.second;
         }
 
         list.push_back(i.second);
@@ -156,7 +146,7 @@ void display(vector<Team> &list){
     
     for(int i = 0; i < list.size(); i++){
 
-        cout << i + 1 << " - " << list[i].name << " " << list[i].solved << " ";
+        cout << i + 1 << " - " << list[i].name << " " << list[i].problemsSolved.size() << " ";
 
         if (list[i].result > 0){
             cout << list[i].result << endl;
@@ -165,6 +155,6 @@ void display(vector<Team> &list){
             cout << "-" << endl;
         }
     }
-}
+} */
 
  
