@@ -1,3 +1,6 @@
+// Emilio Fernando Alonso Villa
+// A00959385
+#pragma once
 
 template <class T>
 class Lista{
