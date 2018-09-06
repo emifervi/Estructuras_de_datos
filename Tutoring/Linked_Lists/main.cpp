@@ -10,14 +10,26 @@ int main(){
     miLista.addFirst("AMA");
     miLista.addLast("SUBLIME");
     
-    LinkedList<string> miLista2(miLista);
-    miLista2.print();
+    LinkedList<string> cloneList(miLista);
+    cloneList.print();
     
-    if(miLista == miLista2){
+    if(miLista == cloneList){
         cout << "son iguales" << endl;
     }
 
+    LinkedList<string> miLista2;
+    miLista2 += "Diego";
+    miLista2 += "usa";
+    miLista2 += "Sublime";
+
+    miLista2.print();
     miLista2 += miLista;
+    miLista2.print();
+    miLista2.reverse();
+    miLista2.print();
+
+    miLista2 = miLista;
+
     miLista2.print();
 
     

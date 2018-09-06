@@ -1,3 +1,8 @@
+/*
+ * Emilio Fernando Alonso Villa
+ * A00959385
+ */
+
 #pragma once
 #include "Node.h"
 
@@ -31,6 +36,7 @@ class LinkedList{
         bool operator == (const LinkedList<T> &Linked);
         void operator += (T data);
         void operator += (const LinkedList<T> &Linked);
+        void operator = (const LinkedList<T> &Linked);
     
     private:
         void deleteHelper();
@@ -46,17 +52,18 @@ LinkedList<T>::LinkedList(){
 
 template <class T>
 LinkedList<T>::LinkedList(const LinkedList<T> &Linked){
-    
-    head = new Node<T>(Linked.head->getData(), NULL);
-    size = 1;
-    
-    Node<T> *curr1 = head, *curr2 = Linked.head;
+    if (Linked.size > 0){
+        head = new Node<T>(Linked.head->getData(), NULL);
+        size = 1;
+        
+        Node<T> *curr1 = head, *curr2 = Linked.head;
 
-    while(curr2->getNext() != NULL){
-        curr2 = curr2->getNext();
-        curr1->setNext(new Node<T>(curr2->getData(), NULL));
-        curr1 = curr1 -> getNext();
-        size++;
+        while(curr2->getNext() != NULL){
+            curr2 = curr2->getNext();
+            curr1->setNext(new Node<T>(curr2->getData(), NULL));
+            curr1 = curr1 -> getNext();
+            size++;
+        }
     }
 }
 
@@ -161,6 +168,7 @@ template <class T>
 int LinkedList<T>::deleteAll(){
     int iCant = size;
     deleteHelper();
+    size = 0;
     return iCant;
 }
 
@@ -171,6 +179,7 @@ void LinkedList<T>::deleteHelper(){
         head = head->getNext();
         delete curr;
         curr = head;
+        size--;
     }
 }
 
@@ -211,6 +220,10 @@ T LinkedList<T>::set(T data, int pos){
 
 template <class T>
 bool LinkedList<T>::change(int pos1, int pos2){
+    if(pos1 > size || pos2 > size || pos1 < 0 || pos2 < 0){
+        return false;
+    }
+
     if (pos1 == pos2){
         return true;
     }
@@ -222,6 +235,7 @@ bool LinkedList<T>::change(int pos1, int pos2){
     for(int i=0; i < posMen; i++){
         curr1 = curr1->getNext();
     }
+
     Node<T> *curr2 = curr1;
     for(int i= posMen; i<posMay; i++){
         curr2 = curr2->getNext();
@@ -262,13 +276,13 @@ void LinkedList<T>::reverse(){
 
 template <class T>
 bool LinkedList<T>::operator == (const LinkedList<T> &Linked){
-    if(this->size != Linked.size){
+    if(size != Linked.size){
         return false;
     }
 
     else{
         bool flag = false;
-        Node<T> *curr1 = this->head, *curr2 = Linked.head;
+        Node<T> *curr1 = head, *curr2 = Linked.head;
         
         while(curr1 != NULL){
             flag = curr1->getData() == curr2->getData();
@@ -314,5 +328,24 @@ void LinkedList<T>::operator += (const LinkedList<T> &Linked){
             curr2 = curr2->getNext();
             size++;
         }
+    }
+}
+
+template <class T>
+void LinkedList<T>::operator = (const LinkedList<T> &Linked){
+    if(this->size > 0){
+        this->deleteAll();
+    }
+
+    head = new Node<T>(Linked.head->getData(), NULL);
+    size = 1;
+        
+    Node<T> *curr1 = head, *curr2 = Linked.head;
+
+    while(curr2->getNext() != NULL){
+        curr2 = curr2->getNext();
+        curr1->setNext(new Node<T>(curr2->getData(), NULL));
+        curr1 = curr1 -> getNext();
+        size++;
     }
 }
