@@ -33,7 +33,7 @@ int main(){
     miLista2.print();
 
     
-    /* miLista.print();
+    miLista.print();
     miLista.add("PELOS", 2);
     miLista.print();
     miLista.deleteFirst();
@@ -47,12 +47,12 @@ int main(){
     miLista.deleteAll();
     miLista.print();
     miLista.addFirst("MÉXICO");
-    miLista.print(); */
-    //miLista.print();
-    //miLista.change(1,2);
-    //miLista.reverse();
-    //miLista.print();
-    /*
+    miLista.print(); 
+    miLista.print();
+    miLista.change(1,2);
+    miLista.reverse();
+    miLista.print();
+    
     LinkedList<int> *tuLista = new LinkedList<int>();
     tuLista->addFirst(100);
     tuLista->addLast(5);
@@ -60,7 +60,7 @@ int main(){
     tuLista->addLast(40);
 
     tuLista->print();
-    delete tuLista;*/
+    delete tuLista;
 
     return 0;
 }
