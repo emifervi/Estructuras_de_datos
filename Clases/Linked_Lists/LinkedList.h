@@ -37,8 +37,11 @@ class LinkedList{
         void operator += (T data);
         void operator += (const LinkedList<T> &Linked);
         void operator = (const LinkedList<T> &Linked);
+
+        void sort();
     
     private:
+        void swap(Node<T> *a, Node<T> *b);
         void deleteHelper();
         Node<T> *head;
         int size;
@@ -98,7 +101,7 @@ void  LinkedList<T>::addLast(T data){
 
 template<class T>
 bool LinkedList<T>::add(T data, int iPosicion){
-    if(iPosicion > size){
+    if(iPosicion > size || iPosicion < 0){
         return false;
     }
     if(iPosicion == 0){
@@ -179,7 +182,6 @@ void LinkedList<T>::deleteHelper(){
         head = head->getNext();
         delete curr;
         curr = head;
-        size--;
     }
 }
 
@@ -228,16 +230,16 @@ bool LinkedList<T>::change(int pos1, int pos2){
         return true;
     }
 
-    int posMen = (pos1 < pos2 ? pos1 : pos2);
-    int posMay = (pos1 > pos2 ? pos1 : pos2);
+    int posMenor = (pos1 < pos2 ? pos1 : pos2);
+    int posMayor = (pos1 > pos2 ? pos1 : pos2);
 
     Node<T> *curr1 = head;
-    for(int i=0; i < posMen; i++){
+    for(int i=0; i < posMenor; i++){
         curr1 = curr1->getNext();
     }
 
     Node<T> *curr2 = curr1;
-    for(int i= posMen; i<posMay; i++){
+    for(int i= posMenor; i<posMayor; i++){
         curr2 = curr2->getNext();
     }
 
@@ -347,5 +349,36 @@ void LinkedList<T>::operator = (const LinkedList<T> &Linked){
         curr1->setNext(new Node<T>(curr2->getData(), NULL));
         curr1 = curr1 -> getNext();
         size++;
+    }
+}
+
+template <class T>
+void LinkedList<T>::swap(Node<T> *a, Node<T> *b){
+    T temp = a->getData();
+    a->setData(b->getData());
+    b->setData(temp);
+}
+
+template <class T>
+void LinkedList<T>::sort(){
+    
+    bool swapped;
+    Node<T> *curr1;
+    
+    if(!this->isEmpty()){
+        do{
+            swapped = false;
+            curr1 = head;
+
+            while (curr1->getNext() != NULL){
+                
+                if(curr1->getData() > curr1->getNext()->getData()){
+                    swap(curr1, curr1->getNext());
+                    swapped = true;
+                }
+
+                curr1 = curr1->getNext();
+            }
+        }while(flag);
     }
 }

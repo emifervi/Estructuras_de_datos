@@ -11,6 +11,10 @@ int main(){
     miLista.addLast("SUBLIME");
     
     LinkedList<string> cloneList(miLista);
+    cout << "antes de ordenar: ";
+    cloneList.print();
+    cloneList.sort();
+    cout << "después de ordenar: ";
     cloneList.print();
     
     if(miLista == cloneList){
