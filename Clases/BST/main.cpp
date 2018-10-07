@@ -18,21 +18,27 @@ int main(){
     miArbol.print(1);
     miArbol.print(2);
     miArbol.print(3);
+    miArbol.printLeaves();
+
+    cout << "El arbol tiene: " << miArbol.count() << " nodos." << endl;
+
+    // cout << "Altura: " << miArbol.getHeight() << endl;
 
     if(miArbol.search(100)){
-        cout << "Encontré el 100" << endl;
+        cout << "Encontre el 100" << endl;
     }
     if(miArbol.search(200)){
-        cout << "Encontré el 200" << endl;
+        cout << "Encontre el 200" << endl;
     }
     else{
-        cout << "No encontré el 200" << endl;
+        cout << "No encontre el 200" << endl;
     }
 
     miArbol.remove(12);
     miArbol.print(1);
     miArbol.print(2);
     miArbol.print(3);
+    miArbol.printLeaves();
 
     return 0;
 }

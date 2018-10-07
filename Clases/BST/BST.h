@@ -1,5 +1,6 @@
 #pragma once
 #include "NodeT.h"
+#include <queue>
 
 class BST{
 public:
@@ -9,6 +10,9 @@ public:
     bool search(int data);
     void remove(int data);
     void print(int x);
+    int count();
+    void printLeaves();
+    // int getHeight();
     
 private:
     NodeT *root;
@@ -18,7 +22,10 @@ private:
     void preOrder(NodeT *r);
     void inOrder(NodeT *r);
     void postOrder(NodeT *r);
+    void leafNodes(NodeT *r);
     void free(NodeT *r);
+    // void leafNodes(NodeT *r);
+    // int height(NodeT *r);
 };
 
 BST::BST(){
@@ -201,6 +208,50 @@ void BST::remove(int data){
     }
 }
 
+/* void BST::leafNodes(NodeT *r){
+
+    if(r == nullptr){
+        return;
+    }
+
+    if(r->getLeft() == nullptr && r->getRight() == nullptr){
+        cout << r->getData() << endl;
+    }
+
+    if(r->getLeft()){
+        leafNodes(r->getLeft());
+    }
+
+    if(r->getRight()){
+        leafNodes(r->getRight());
+    }
+} */
+void BST::printLeaves(){
+    if(!root){
+        return;
+    }
+
+    else{
+        queue<NodeT *> leafQueue;
+        leafQueue.push(root);
+
+        while(!leafQueue.empty()){
+            NodeT *temp = leafQueue.front();
+            leafQueue.pop();
+
+            if(temp->getLeft()){
+                leafQueue.push(temp->getLeft());
+            }
+            if(temp->getRight()){
+                leafQueue.push(temp->getRight());
+            }
+            if(!temp->getLeft() && !temp->getRight()){
+                cout << temp->getData() << endl;
+            }
+        }
+    }
+}
+
 void BST::print(int c){
     switch(c){
         case 1:
@@ -214,6 +265,57 @@ void BST::print(int c){
         case 3:
             postOrder(root);
             break;
+        
+        /* case 4:
+            leafNodes(root);
+            break; */
     }
     cout << endl;
+}
+/* 
+int BST::height(NodeT *r){
+    if(r == nullptr){
+        return 0;
+    }
+
+    else{
+        int leftHeight = height(r->getLeft());
+        int rightHeight = height(r->getRight());
+
+        int maxHeight = (leftHeight > rightHeight) ? 
+                         leftHeight + 1 : rightHeight + 1;
+        return maxHeight;
+    }
+}
+ 
+int BST::getHeight(){
+    return height(root);
+} */
+
+int BST::count(){
+    if(root == nullptr){
+        return 0;
+    }
+
+    else{
+        queue<NodeT *> nodeQueue;
+        int nodeCount = 1;
+        nodeQueue.push(root);
+
+        while(!nodeQueue.empty()){
+            NodeT *temp = nodeQueue.front();
+            nodeQueue.pop();
+
+            if(temp->getLeft()){
+                nodeQueue.push(temp->getLeft());
+                nodeCount++;
+            }
+            if(temp->getRight()){
+                nodeQueue.push(temp->getRight());
+                nodeCount++;
+            }
+        }
+
+        return nodeCount;
+    }
 }
