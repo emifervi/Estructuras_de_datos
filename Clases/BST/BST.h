@@ -12,7 +12,9 @@ public:
     void print(int x);
     int count();
     void printLeaves();
-    // int getHeight();
+    int getHeight(); // tarea programada
+    void ancestors(int data);
+    int whatLevelamI(int data);
     
 private:
     NodeT *root;
@@ -22,10 +24,13 @@ private:
     void preOrder(NodeT *r);
     void inOrder(NodeT *r);
     void postOrder(NodeT *r);
+    void levelOrder(NodeT *r);
     void leafNodes(NodeT *r);
     void free(NodeT *r);
-    // void leafNodes(NodeT *r);
-    // int height(NodeT *r);
+    // void leafNodes(NodeT *r);  // recurisva
+    int height(NodeT *r); // tarea programada
+    int findLevel(NodeT *r, int level, int data);
+
 };
 
 BST::BST(){
@@ -59,6 +64,21 @@ bool BST::search(int data){
                 curr->getLeft() : curr->getRight();
     }
     return false;
+}
+
+void BST::ancestors(int data){
+    NodeT *curr = root;
+    while(curr != nullptr){
+        if(curr->getData() == data){
+            cout << endl;
+            return;
+        }
+
+        cout << curr->getData() << " ";
+        curr = (curr->getData() > data)?
+                curr->getLeft() : curr->getRight();
+    }
+    
 }
 
 int BST::predecesor(NodeT *r){
@@ -101,6 +121,27 @@ void BST::postOrder(NodeT *r){
         postOrder(r->getRight());
         cout << r->getData() << " ";
     }
+}
+
+void BST::levelOrder(NodeT *r){
+    if(r != nullptr){
+        queue<NodeT *> nodeQueue;
+        nodeQueue.push(r);
+
+        while(!nodeQueue.empty()){
+            NodeT *temp = nodeQueue.front();
+            nodeQueue.pop();
+            cout << temp->getData() << " ";
+
+            if(temp->getLeft()){
+                nodeQueue.push(temp->getLeft());
+            }
+            if(temp->getRight()){
+                nodeQueue.push(temp->getRight());
+            }
+        }
+    }
+
 }
 
 void BST::free(NodeT *r){
@@ -208,7 +249,9 @@ void BST::remove(int data){
     }
 }
 
-/* void BST::leafNodes(NodeT *r){
+/* 
+Leaf nodes recursiva
+void BST::leafNodes(NodeT *r){
 
     if(r == nullptr){
         return;
@@ -226,8 +269,10 @@ void BST::remove(int data){
         leafNodes(r->getRight());
     }
 } */
+
 void BST::printLeaves(){
     if(!root){
+        
         return;
     }
 
@@ -246,9 +291,11 @@ void BST::printLeaves(){
                 leafQueue.push(temp->getRight());
             }
             if(!temp->getLeft() && !temp->getRight()){
-                cout << temp->getData() << endl;
+                cout << temp->getData() << " ";
             }
         }
+
+        cout << endl;
     }
 }
 
@@ -269,10 +316,14 @@ void BST::print(int c){
         /* case 4:
             leafNodes(root);
             break; */
+        
+        case 5:
+            levelOrder(root);
+            break;
     }
     cout << endl;
 }
-/* 
+ 
 int BST::height(NodeT *r){
     if(r == nullptr){
         return 0;
@@ -287,10 +338,39 @@ int BST::height(NodeT *r){
         return maxHeight;
     }
 }
+
+int BST::findLevel(NodeT *r, int level, int number){
+    
+    if(r == nullptr){
+        return 0;
+    }
+
+    if(r->getData() == number){
+        return level;
+    }
+
+    int nextLevel = findLevel(r->getLeft(), level + 1, number);
+    if(nextLevel != 0){
+        return nextLevel;
+    }
+
+    nextLevel = findLevel(r->getRight(), level + 1, number);
+    if(nextLevel != 0){
+        return nextLevel;
+    }
+
+    else{
+        return -1;
+    }
+}
+
+int BST::whatLevelamI(int data){
+    return findLevel(root, 0, data);
+}
  
 int BST::getHeight(){
     return height(root);
-} */
+}
 
 int BST::count(){
     if(root == nullptr){
@@ -319,3 +399,5 @@ int BST::count(){
         return nodeCount;
     }
 }
+
+

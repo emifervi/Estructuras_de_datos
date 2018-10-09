@@ -18,11 +18,33 @@ int main(){
     miArbol.print(1);
     miArbol.print(2);
     miArbol.print(3);
+
+
+
+    /* Purebas tarea programada */
+    
+    // prueba printLeaves
     miArbol.printLeaves();
+    
+    // prueba acestros
+    cout << "Ancestros de 65: ";
+    miArbol.ancestors(65);
 
+    // prueba count
     cout << "El arbol tiene: " << miArbol.count() << " nodos." << endl;
+    
+    // prueba height
+    cout << "Altura del arbol: " << miArbol.getHeight() << endl;
 
-    // cout << "Altura: " << miArbol.getHeight() << endl;
+    // prueba print(5)
+    cout << "Level Order: ";
+    miArbol.print(5);
+
+    // prueba whatLevelamI
+    cout << "Nivel de 65: ";
+    cout << miArbol.whatLevelamI(12) << endl;
+
+    /* Fin pruebas */
 
     if(miArbol.search(100)){
         cout << "Encontre el 100" << endl;
@@ -38,7 +60,6 @@ int main(){
     miArbol.print(1);
     miArbol.print(2);
     miArbol.print(3);
-    miArbol.printLeaves();
 
     return 0;
 }
