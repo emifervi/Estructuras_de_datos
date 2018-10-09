@@ -34,7 +34,7 @@ int main(){
     cout << "El arbol tiene: " << miArbol.count() << " nodos." << endl;
     
     // prueba height
-    cout << "Altura del arbol: " << miArbol.getHeight() << endl;
+    cout << "Altura del arbol: " << miArbol.height() << endl;
 
     // prueba print(5)
     cout << "Level Order: ";
@@ -42,7 +42,7 @@ int main(){
 
     // prueba whatLevelamI
     cout << "Nivel de 65: ";
-    cout << miArbol.whatLevelamI(12) << endl;
+    cout << miArbol.whatLevelamI(200) << endl;
 
     /* Fin pruebas */
 

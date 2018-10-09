@@ -1,6 +1,7 @@
 #pragma once
 #include "NodeT.h"
 #include <queue>
+#include <stack>
 
 class BST{
 public:
@@ -12,7 +13,7 @@ public:
     void print(int x);
     int count();
     void printLeaves();
-    int getHeight(); // tarea programada
+    int height(); // tarea programada
     void ancestors(int data);
     int whatLevelamI(int data);
     
@@ -28,9 +29,7 @@ private:
     void leafNodes(NodeT *r);
     void free(NodeT *r);
     // void leafNodes(NodeT *r);  // recurisva
-    int height(NodeT *r); // tarea programada
-    int findLevel(NodeT *r, int level, int data);
-
+    int getHeight(NodeT *r); // tarea programada
 };
 
 BST::BST(){
@@ -68,17 +67,23 @@ bool BST::search(int data){
 
 void BST::ancestors(int data){
     NodeT *curr = root;
-    while(curr != nullptr){
-        if(curr->getData() == data){
-            cout << endl;
-            return;
-        }
+    stack<NodeT *>nodeStack;
+    nodeStack.push(curr);
 
-        cout << curr->getData() << " ";
-        curr = (curr->getData() > data)?
-                curr->getLeft() : curr->getRight();
+    while(!nodeStack.empty()){
+        if(curr->getData() == data){
+            cout << nodeStack.top()->getData() << " ";
+            nodeStack.pop();
+        }
+        else{
+            curr = (curr->getData() > data) ?
+                    curr->getLeft() : curr->getRight();
+            if(curr->getData() != data){
+                nodeStack.push(curr);
+            }
+        }
     }
-    
+    cout << endl;
 }
 
 int BST::predecesor(NodeT *r){
@@ -272,7 +277,6 @@ void BST::leafNodes(NodeT *r){
 
 void BST::printLeaves(){
     if(!root){
-        
         return;
     }
 
@@ -324,14 +328,16 @@ void BST::print(int c){
     cout << endl;
 }
  
-int BST::height(NodeT *r){
+
+
+int BST::getHeight(NodeT *r){
     if(r == nullptr){
         return 0;
     }
 
     else{
-        int leftHeight = height(r->getLeft());
-        int rightHeight = height(r->getRight());
+        int leftHeight = getHeight(r->getLeft());
+        int rightHeight = getHeight(r->getRight());
 
         int maxHeight = (leftHeight > rightHeight) ? 
                          leftHeight + 1 : rightHeight + 1;
@@ -339,37 +345,25 @@ int BST::height(NodeT *r){
     }
 }
 
-int BST::findLevel(NodeT *r, int level, int number){
-    
-    if(r == nullptr){
-        return 0;
-    }
-
-    if(r->getData() == number){
-        return level;
-    }
-
-    int nextLevel = findLevel(r->getLeft(), level + 1, number);
-    if(nextLevel != 0){
-        return nextLevel;
-    }
-
-    nextLevel = findLevel(r->getRight(), level + 1, number);
-    if(nextLevel != 0){
-        return nextLevel;
-    }
-
-    else{
-        return -1;
-    }
-}
-
 int BST::whatLevelamI(int data){
-    return findLevel(root, 0, data);
+    NodeT *curr = root;
+    int level = 0;
+
+    while(curr != nullptr){
+        if(curr->getData() == data){
+            return level;
+        }
+        else{
+            level++;
+            curr = (curr->getData() > data) ? 
+                    curr->getLeft():curr->getRight();
+        }
+    }
+    return -1;
 }
  
-int BST::getHeight(){
-    return height(root);
+int BST::height(){
+    return getHeight(root);
 }
 
 int BST::count(){
