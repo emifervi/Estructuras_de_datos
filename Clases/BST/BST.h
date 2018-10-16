@@ -16,6 +16,8 @@ public:
     int height(); // tarea programada
     void ancestors(int data);
     int whatLevelamI(int data);
+    int nearestRelative(int num1, int num2);
+    bool operator == (BST arbol2);
     
 private:
     NodeT *root;
@@ -25,11 +27,11 @@ private:
     void preOrder(NodeT *r);
     void inOrder(NodeT *r);
     void postOrder(NodeT *r);
-    void levelOrder(NodeT *r);
+    void levelOrder();
     void leafNodes(NodeT *r);
     void free(NodeT *r);
-    // void leafNodes(NodeT *r);  // recurisva
     int getHeight(NodeT *r); // tarea programada
+    int cuantos(NodeT *r);
 };
 
 BST::BST(){
@@ -67,23 +69,28 @@ bool BST::search(int data){
 
 void BST::ancestors(int data){
     NodeT *curr = root;
-    stack<NodeT *>nodeStack;
-    nodeStack.push(curr);
+    stack<int>pila;
 
-    while(!nodeStack.empty()){
+    while(curr != nullptr){
         if(curr->getData() == data){
-            cout << nodeStack.top()->getData() << " ";
-            nodeStack.pop();
-        }
-        else{
-            curr = (curr->getData() > data) ?
-                    curr->getLeft() : curr->getRight();
-            if(curr->getData() != data){
-                nodeStack.push(curr);
+            if(pila.empty()){
+                cout << "Ese dato no tiene amcestros" << endl;
             }
+            else{
+                while(!pila.empty()){
+                    cout << pila.top() << " ";
+                    pila.pop();
+                }
+                cout << endl;
+            }
+            return;
         }
+    pila.push(curr->getData());
+    curr = (curr->getData() > data) ?
+            curr->getLeft() : curr->getRight();
     }
-    cout << endl;
+
+    cout << "El dato no está en el árbol" << endl;
 }
 
 int BST::predecesor(NodeT *r){
@@ -128,21 +135,22 @@ void BST::postOrder(NodeT *r){
     }
 }
 
-void BST::levelOrder(NodeT *r){
-    if(r != nullptr){
+void BST::levelOrder(){
+    if(root != nullptr){
         queue<NodeT *> nodeQueue;
-        nodeQueue.push(r);
+        nodeQueue.push(root);
+        NodeT* curr;
 
         while(!nodeQueue.empty()){
-            NodeT *temp = nodeQueue.front();
+            curr = nodeQueue.front();
             nodeQueue.pop();
-            cout << temp->getData() << " ";
+            cout << curr->getData() << " ";
 
-            if(temp->getLeft()){
-                nodeQueue.push(temp->getLeft());
+            if(curr->getLeft() != nullptr){
+                nodeQueue.push(curr->getLeft());
             }
-            if(temp->getRight()){
-                nodeQueue.push(temp->getRight());
+            if(curr->getRight() != nullptr){
+                nodeQueue.push(curr->getRight());
             }
         }
     }
@@ -254,26 +262,19 @@ void BST::remove(int data){
     }
 }
 
-/* 
-Leaf nodes recursiva
+// leafnodes recursiva
 void BST::leafNodes(NodeT *r){
+    if (r != nullptr){
+        if(r->getLeft() == nullptr && r->getRight() == nullptr){
+            cout << r->getData() << " ";
+        }
 
-    if(r == nullptr){
-        return;
+        else{
+            leafNodes(r->getLeft());
+            leafNodes(r->getRight());
+        }
     }
-
-    if(r->getLeft() == nullptr && r->getRight() == nullptr){
-        cout << r->getData() << endl;
-    }
-
-    if(r->getLeft()){
-        leafNodes(r->getLeft());
-    }
-
-    if(r->getRight()){
-        leafNodes(r->getRight());
-    }
-} */
+} 
 
 void BST::printLeaves(){
     if(!root){
@@ -317,12 +318,12 @@ void BST::print(int c){
             postOrder(root);
             break;
         
-        /* case 4:
+        case 4:
             leafNodes(root);
-            break; */
+            break;
         
         case 5:
-            levelOrder(root);
+            levelOrder();
             break;
     }
     cout << endl;
@@ -335,14 +336,14 @@ int BST::getHeight(NodeT *r){
         return 0;
     }
 
-    else{
-        int leftHeight = getHeight(r->getLeft());
-        int rightHeight = getHeight(r->getRight());
+    int izq = getHeight(r->getLeft());
+    int der = getHeight(r->getRight());
 
-        int maxHeight = (leftHeight > rightHeight) ? 
-                         leftHeight + 1 : rightHeight + 1;
-        return maxHeight;
-    }
+    return 1 + (izq > der ? izq : der);
+}
+
+int BST::height(){
+    return getHeight(root);
 }
 
 int BST::whatLevelamI(int data){
@@ -353,45 +354,60 @@ int BST::whatLevelamI(int data){
         if(curr->getData() == data){
             return level;
         }
-        else{
-            level++;
-            curr = (curr->getData() > data) ? 
-                    curr->getLeft():curr->getRight();
-        }
+        level++;
+        curr = (curr->getData() > data) ? 
+                curr->getLeft():curr->getRight();
+
     }
     return -1;
 }
  
-int BST::height(){
-    return getHeight(root);
-}
 
 int BST::count(){
-    if(root == nullptr){
+    return cuantos(root);
+}
+
+int BST::cuantos(NodeT *r){
+    if(r == nullptr){
         return 0;
     }
+    return 1 + cuantos(r->getLeft()) + cuantos(r->getRight());
+}
 
-    else{
-        queue<NodeT *> nodeQueue;
-        int nodeCount = 1;
-        nodeQueue.push(root);
+/* SEGUNDA TARA OPERACIONES */
+int BST::nearestRelative(int num1, int num2){
+    int bigger = (num1>num2) ? num1 : num2;
+    int smaller = (num1<num2) ? num1 : num2;
+    int parent;
 
-        while(!nodeQueue.empty()){
-            NodeT *temp = nodeQueue.front();
-            nodeQueue.pop();
-
-            if(temp->getLeft()){
-                nodeQueue.push(temp->getLeft());
-                nodeCount++;
-            }
-            if(temp->getRight()){
-                nodeQueue.push(temp->getRight());
-                nodeCount++;
-            }
-        }
-
-        return nodeCount;
+    if(root->getData() == bigger || root->getData() == smaller){
+        cout << "No hay relativo más cercano" << endl;
+        return -1;
     }
+
+    NodeT *curr = root;
+    
+    if(smaller > root->getData()){
+        curr = root->getRight();
+    }
+    else if(bigger < root->getData()){
+        curr = root->getLeft();
+    }
+
+    while(!(smaller < curr->getData() && bigger > curr->getData())){    
+        parent = curr->getData();
+        if(smaller > curr->getData()){
+            curr = curr->getRight();
+        }
+        if(bigger < curr->getData()){
+            curr = curr->getLeft();
+        }
+        if(smaller == curr->getData() || bigger == curr->getData()){
+            return parent;
+        }
+    }
+
+    return curr->getData();
 }
 
 

@@ -19,12 +19,10 @@ int main(){
     miArbol.print(2);
     miArbol.print(3);
 
-
-
     /* Purebas tarea programada */
-    
-    // prueba printLeaves
-    miArbol.printLeaves();
+
+    // Prueba LCA
+    cout << "Nearest Relative de: 50 y 65: " << miArbol.nearestRelative(-5, 13) << endl;
     
     // prueba acestros
     cout << "Ancestros de 65: ";
@@ -43,6 +41,10 @@ int main(){
     // prueba whatLevelamI
     cout << "Nivel de 65: ";
     cout << miArbol.whatLevelamI(200) << endl;
+
+    cout << "Nodos hoja: " << endl;
+    miArbol.printLeaves();
+    miArbol.print(4);
 
     /* Fin pruebas */
 
