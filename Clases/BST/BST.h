@@ -6,6 +6,7 @@
 class BST{
 public:
     BST();
+    BST(const BST &arbolOriginal);
     ~BST();
     void add(int data);
     bool search(int data);
@@ -17,7 +18,9 @@ public:
     void ancestors(int data);
     int whatLevelamI(int data);
     int nearestRelative(int num1, int num2);
-    bool operator == (BST arbol2);
+    bool operator == (const BST &arbolito);
+    void mirror();
+    int maxWidth(); 
     
 private:
     NodeT *root;
@@ -32,6 +35,10 @@ private:
     void free(NodeT *r);
     int getHeight(NodeT *r); // tarea programada
     int cuantos(NodeT *r);
+    NodeT * copier(NodeT* const& originalTree);
+    bool nodeComparation(NodeT *leftTree, NodeT *rightTree);
+    void reversePreOrder(NodeT *r);
+    int getWidth(NodeT *r);
 };
 
 BST::BST(){
@@ -386,7 +393,7 @@ int BST::nearestRelative(int num1, int num2){
     }
 
     NodeT *curr = root;
-    
+
     if(smaller > root->getData()){
         curr = root->getRight();
     }
@@ -410,4 +417,75 @@ int BST::nearestRelative(int num1, int num2){
     return curr->getData();
 }
 
+NodeT * BST::copier(NodeT* const& originalTree){
+    if(originalTree != nullptr){
+        NodeT *newTree = new NodeT(originalTree->getData());
+        newTree->setRight(copier(originalTree->getRight()));
+        newTree->setLeft(copier(originalTree->getLeft()));
+        return newTree;
+    }
+} 
 
+BST::BST(const BST &arbolOriginal){
+    this->root =(arbolOriginal.root == nullptr) ? nullptr:this->root = copier(arbolOriginal.root);
+}
+
+bool BST::nodeComparation(NodeT *leftTree, NodeT* rightTree){
+    if(leftTree == nullptr && rightTree == nullptr){
+        return true;
+    }
+    else if(leftTree != nullptr && rightTree != nullptr){
+        return (leftTree->getData() != rightTree->getData()) ? false :
+                                                               nodeComparation(leftTree->getLeft(), rightTree->getLeft())
+                                                               && nodeComparation(leftTree->getRight(), rightTree->getRight());
+    }
+    return false;
+}
+
+bool BST::operator==(const BST &arbolito){
+    return nodeComparation(this->root, arbolito.root);
+}
+
+void BST::reversePreOrder(NodeT *r){
+    if(r != nullptr){
+        NodeT *temp;
+        temp = r->getRight();
+        r->setRight(r->getLeft());
+        r->setLeft(temp);
+        reversePreOrder(r->getLeft());
+        reversePreOrder(r->getRight());
+    }
+}
+
+void BST::mirror(){
+    reversePreOrder(root);
+}
+
+int BST::maxWidth(){
+    if(root == nullptr){
+        return 0;
+    }
+    
+    queue<NodeT *> nodeQueue;
+    nodeQueue.push(root);
+    NodeT *curr = nullptr;
+    
+    int maxW = 0;
+
+    while(!nodeQueue.empty()){
+        maxW = (maxW < nodeQueue.size()) ? nodeQueue.size() : maxW;
+        for(int i = nodeQueue.size(); i > 0; i--){
+            curr = nodeQueue.front();
+            nodeQueue.pop();
+
+            if(curr->getLeft()){
+                nodeQueue.push(curr->getLeft());
+            }
+            if(curr->getRight()){
+                nodeQueue.push(curr->getRight());
+            }
+        }
+    }
+
+    return maxW;
+}
