@@ -18,7 +18,6 @@ public:
     int top();
     int size();
     bool empty();
-    void print();
 };
 
 Priority::Priority(){
@@ -55,37 +54,38 @@ void Priority::push(int data){
 }
 
 void Priority::arrangeDownwards(std::vector<int> &heap){
-    int left;
-    int right;
+    int i = 0;
+    int left = 2*i + 1;
+    int right = 2*i + 2;
     int highestPriority;
 
-    for(int i = (heap.size()-1/2); i >= 0 ; i--){
-        left = 2*i + 1;
-        right = 2*i + 2;
-         
-        // Highest priority between left son and father
-        if(left < heap.size() - 1 && compare(heap[left], heap[i])){
-            highestPriority = left;
-        }
-        else{
-            highestPriority = i;
-        }
+    while(left < heap.size() -1){
+        // Highest priority between left son and father.
+        highestPriority = compare(heap[left], heap[i]) ? left : i; 
 
-        // Highest priority bewteeen rightson and highestPriority
-        if(right < heap.size() - 1 && compare(heap[right], heap[highestPriority])){
+        // Highest priority bewteeen right son and highestPriority
+        if(right <= heap.size() - 1 && compare(heap[right], heap[highestPriority])){
             highestPriority = right;
         }
-
+        
+        // swaps when they are in diferent positions, and updates, else it breaks
         if(highestPriority != i){
             swap(heap[i], heap[highestPriority]);
+            i = highestPriority;
         }
+
+        else{
+            break;
+        }
+    
+        left = 2*i + 1;
+        right = 2*i + 2;
     }
 }
 
 void Priority::pop(){
     swap(priorityQueue.front(), priorityQueue.back());
-    priorityQueue.erase(priorityQueue.end()-1);
-    
+    priorityQueue.pop_back();
 
     if(!priorityQueue.empty()){
         arrangeDownwards(priorityQueue);
@@ -103,11 +103,3 @@ int Priority::size(){
 bool Priority::empty(){
     return priorityQueue.empty();
 }
-
-void Priority::print(){
-    for(int i=0; i < priorityQueue.size(); i++){
-        cout << priorityQueue[i] << " ";
-    }
-    cout << endl;
-}
-

@@ -3,7 +3,7 @@ using namespace std;
 #include "Priority.h"
 
 int main(){
-    Priority myPriority;
+    Priority myPriority(true);
 
     myPriority.push(14);
     myPriority.push(10);
@@ -15,12 +15,11 @@ int main(){
     myPriority.push(17);
     myPriority.push(43);
     myPriority.push(23);
-    
-    myPriority.print();
 
     while(!myPriority.empty()){
         cout << myPriority.top() << " ";
         myPriority.pop();
+        cout << myPriority.size() << endl;
     }
 
     return 0;
