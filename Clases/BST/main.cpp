@@ -25,7 +25,6 @@ int main(){
 
     // Prueba LCA
     cout << "Nearest Relative de 50 y 65: " << miArbol.nearestRelative(50, 65) << endl;
-    
 
     // prueba operator ==
     if(miArbol == miArbol2){
